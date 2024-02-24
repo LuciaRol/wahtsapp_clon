@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import gatoFeliz from '../img/gato-feliz.jpg';
+import gatoGrunon from '../img/gato-grunon.jpg';
+import gato from '../img/gato.jpg';
 
 const Registration = ({ onRegister }) => {
     const [username, setUsername] = useState('');
@@ -6,13 +9,12 @@ const Registration = ({ onRegister }) => {
 
     const handleRegistration = () => {
         if (username.trim() !== '') {
-            onRegister(username, profilePicture ? URL.createObjectURL(profilePicture) : null);
+            onRegister(username, profilePicture);
         }
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setProfilePicture(file);
+    const handlePictureChange = (selectedPicture) => {
+        setProfilePicture(selectedPicture);
     };
 
     const handleKeyPress = (e) => {
@@ -31,7 +33,38 @@ const Registration = ({ onRegister }) => {
                 onKeyPress={handleKeyPress}
                 placeholder="Enter your username"
             />
-            <input type="file" onChange={handleFileChange} />
+            <div>
+                <label>
+                    <input
+                        type="radio"
+                        name="profilePicture"
+                        value={gatoFeliz}
+                        onChange={() => handlePictureChange(gatoFeliz)}
+                    />
+                    
+                    <img src={gatoFeliz} alt="Gato Feliz" style={{ maxWidth: '100px' }} />
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="profilePicture"
+                        value={gatoGrunon}
+                        onChange={() => handlePictureChange(gatoGrunon)}
+                    />
+                    
+                    <img src={gatoGrunon} alt="Gato Grunon" style={{ maxWidth: '100px' }} />
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="profilePicture"
+                        value={gato}
+                        onChange={() => handlePictureChange(gato)}
+                    />
+                    
+                    <img src={gato} alt="Gato" style={{ maxWidth: '100px' }} />
+                </label>
+            </div>
             <button onClick={handleRegistration}>Register</button>
         </div>
     );
