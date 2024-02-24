@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 
 const Registration = ({ onRegister }) => {
     const [username, setUsername] = useState('');
+    const [profilePicture, setProfilePicture] = useState(null);
 
     const handleRegistration = () => {
         if (username.trim() !== '') {
-            onRegister(username);
+            onRegister(username, profilePicture ? URL.createObjectURL(profilePicture) : null);
         }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setProfilePicture(file);
     };
 
     const handleKeyPress = (e) => {
@@ -22,9 +28,10 @@ const Registration = ({ onRegister }) => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                onKeyPress={handleKeyPress} // Handle Enter key press
+                onKeyPress={handleKeyPress}
                 placeholder="Enter your username"
             />
+            <input type="file" onChange={handleFileChange} />
             <button onClick={handleRegistration}>Register</button>
         </div>
     );

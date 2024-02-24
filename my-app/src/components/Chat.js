@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const Chat = ({ username }) => {
+const Chat = ({ username, profilePicture }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const socket = io('http://localhost:4000'); // Change the URL if your server is hosted elsewhere
@@ -23,7 +23,8 @@ const Chat = ({ username }) => {
         if (input.trim() !== '') {
             const newMessage = {
                 text: input,
-                sender: username
+                sender: username,
+                profilePicture: profilePicture // Include profilePicture in the message object
             };
             socket.emit('message', newMessage);
             setMessages(prevMessages => [...prevMessages, newMessage]); // Display sent message locally
@@ -43,6 +44,7 @@ const Chat = ({ username }) => {
             <div>
                 {messages.map((message, index) => (
                     <div key={index}>
+                        {message.profilePicture && <img src={message.profilePicture} alt="Profile" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />} {/* Display profile picture if available */}
                         {message.sender === username ? `${username}: ` : `${message.sender}: `}{message.text}
                     </div>
                 ))}
