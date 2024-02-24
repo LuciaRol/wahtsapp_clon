@@ -6,15 +6,20 @@ import gato from '../img/gato.jpg';
 const Registration = ({ onRegister }) => {
     const [username, setUsername] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
+    const [status, setStatus] = useState('');
 
     const handleRegistration = () => {
-        if (username.trim() !== '') {
-            onRegister(username, profilePicture);
+        if (username.trim() !== '' && profilePicture && status) {
+            onRegister(username, profilePicture, status);
         }
     };
 
     const handlePictureChange = (selectedPicture) => {
         setProfilePicture(selectedPicture);
+    };
+
+    const handleStatusChange = (e) => {
+        setStatus(e.target.value);
     };
 
     const handleKeyPress = (e) => {
@@ -51,7 +56,7 @@ const Registration = ({ onRegister }) => {
                         value={gatoGrunon}
                         onChange={() => handlePictureChange(gatoGrunon)}
                     />
-                    
+                   
                     <img src={gatoGrunon} alt="Gato Grunon" style={{ maxWidth: '100px' }} />
                 </label>
                 <label>
@@ -61,8 +66,19 @@ const Registration = ({ onRegister }) => {
                         value={gato}
                         onChange={() => handlePictureChange(gato)}
                     />
-                    
+                   
                     <img src={gato} alt="Gato" style={{ maxWidth: '100px' }} />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Select Status:
+                    <select value={status} onChange={handleStatusChange}>
+                        <option value="">Select status</option>
+                        <option value="Happy">Happy</option>
+                        <option value="Grumpy">Grumpy</option>
+                        <option value="Neutral">Neutral</option>
+                    </select>
                 </label>
             </div>
             <button onClick={handleRegistration}>Register</button>
