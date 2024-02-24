@@ -9,6 +9,12 @@ const Registration = ({ onRegister }) => {
         }
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleRegistration();
+        }
+    };
+
     return (
         <div>
             <h2>Register Your Username</h2>
@@ -16,6 +22,7 @@ const Registration = ({ onRegister }) => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyPress={handleKeyPress} // Handle Enter key press
                 placeholder="Enter your username"
             />
             <button onClick={handleRegistration}>Register</button>

@@ -21,7 +21,12 @@ const Chat = ({ username }) => {
     // Function to send a message
     const sendMessage = () => {
         if (input.trim() !== '') {
-            socket.emit('message', { text: input, sender: username });
+            const newMessage = {
+                text: input,
+                sender: username
+            };
+            socket.emit('message', newMessage);
+            setMessages(prevMessages => [...prevMessages, newMessage]); // Display sent message locally
             setInput('');
         }
     };
