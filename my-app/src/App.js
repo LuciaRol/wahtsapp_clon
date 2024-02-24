@@ -1,11 +1,17 @@
-import React from 'react';
-import Chat from './components/Chat'; // Importing the Chat component from the components directory
+import React, { useState } from 'react';
+import Registration from './components/registration';
+import Chat from './components/Chat';
 
 const App = () => {
+    const [username, setUsername] = useState('');
+
+    const handleRegister = (username) => {
+        setUsername(username);
+    };
+
     return (
         <div>
-            <h1>Chat Application</h1>
-            <Chat /> {/* Rendering the Chat component */}
+            {!username ? <Registration onRegister={handleRegister} /> : <Chat username={username} />}
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const Chat = () => {
+const Chat = ({ username }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const socket = io('http://localhost:4000'); // Change the URL if your server is hosted elsewhere
@@ -9,7 +9,7 @@ const Chat = () => {
     useEffect(() => {
         // Listen for incoming messages
         socket.on('message', (message) => {
-            setMessages(prevMessages => [...prevMessages, { text: message, sender: 'Tu' }]);
+            setMessages(prevMessages => [...prevMessages, message]);
         });
 
         // Clean up the connection on unmount
@@ -21,13 +21,11 @@ const Chat = () => {
     // Function to send a message
     const sendMessage = () => {
         if (input.trim() !== '') {
-            socket.emit('message', input);
-            setMessages(prevMessages => [...prevMessages, { text: input, sender: 'Yo' }]); // Display sent message locally
+            socket.emit('message', { text: input, sender: username });
             setInput('');
         }
     };
 
-    // Function to handle key press events in the input field
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             sendMessage();
@@ -40,7 +38,7 @@ const Chat = () => {
             <div>
                 {messages.map((message, index) => (
                     <div key={index}>
-                        {message.sender === 'Yo' ? 'Yo: ' : 'Tu: '}{message.text}
+                        {message.sender === username ? `${username}: ` : `${message.sender}: `}{message.text}
                     </div>
                 ))}
             </div>
@@ -49,7 +47,7 @@ const Chat = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress} // Call handleKeyPress when a key is pressed
+                onKeyPress={handleKeyPress}
             />
             <button onClick={sendMessage}>Send</button>
         </div>
