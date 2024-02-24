@@ -9,19 +9,29 @@ const Chat = () => {
     useEffect(() => {
         // Listen for incoming messages
         socket.on('message', (message) => {
-            setMessages([...messages, message]);
+            setMessages(prevMessages => [...prevMessages, { text: message, sender: 'Tu' }]);
         });
 
         // Clean up the connection on unmount
         return () => {
             socket.disconnect();
         };
-    }, [messages, socket]);
+    }, [socket]);
 
     // Function to send a message
     const sendMessage = () => {
-        socket.emit('message', input);
-        setInput('');
+        if (input.trim() !== '') {
+            socket.emit('message', input);
+            setMessages(prevMessages => [...prevMessages, { text: input, sender: 'Yo' }]); // Display sent message locally
+            setInput('');
+        }
+    };
+
+    // Function to handle key press events in the input field
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
     };
 
     return (
@@ -29,7 +39,9 @@ const Chat = () => {
             {/* Display messages */}
             <div>
                 {messages.map((message, index) => (
-                    <div key={index}>{message}</div>
+                    <div key={index}>
+                        {message.sender === 'Yo' ? 'Yo: ' : 'Tu: '}{message.text}
+                    </div>
                 ))}
             </div>
             {/* Input field and send button */}
@@ -37,6 +49,7 @@ const Chat = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress} // Call handleKeyPress when a key is pressed
             />
             <button onClick={sendMessage}>Send</button>
         </div>
